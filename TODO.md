@@ -1,0 +1,2 @@
+- [ ] Add scroll event listener in script.js to toggle 'header-scrolled' class on header when scrolled
+- [ ] Update CSS for .header-scrolled to make header thinner and align nav-container with logo

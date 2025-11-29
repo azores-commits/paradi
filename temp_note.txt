@@ -1,0 +1,1 @@
+centering about headings change in styles.css
