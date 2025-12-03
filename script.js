@@ -73,10 +73,10 @@ document.querySelectorAll('section').forEach(section => {
 });
 
 // Animate service cards
-document.querySelectorAll('.service-card').forEach((el, index) => {
+document.querySelectorAll('.service-card').forEach((el) => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(20px)';
-    el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+    el.style.transition = `opacity 0.6s ease 0.1s, transform 0.6s ease 0.1s`;
     observer.observe(el);
 });
 
