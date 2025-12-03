@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Calibri', Arial, sans-serif;
             background-color: #d6d6d6;
             color: #333;
             line-height: 1.6;
@@ -186,6 +186,23 @@
             margin: 0 auto;
         }
 
+        /* Fade animation helpers */
+        .fade-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-section.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-section.leaving-up {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
         section h2 {
             font-size: 36px;
             margin-bottom: 40px;
@@ -226,7 +243,11 @@
             position: relative;
         }
 
-        .service-card:hover,
+        .service-card:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
         .project-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
@@ -269,10 +290,94 @@
             background-color: #d6d6d6;
         }
 
-        .projects h2,
-        .projects p {
+        .projects h2 {
             text-align: center;
             color: #333;
+            margin-bottom: 30px;
+        }
+
+        .projects-carousel {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            height: 260px;
+            perspective: 1200px;
+        }
+
+        .project-card-3d {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 260px;
+            height: 220px;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease, opacity 0.6s ease;
+            cursor: pointer;
+        }
+
+        .project-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+        }
+
+        .project-card-front,
+        .project-card-back {
+            position: absolute;
+            inset: 0;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backface-visibility: hidden;
+        }
+
+        .project-card-front h3 {
+            font-size: 22px;
+            color: #222;
+            text-align: center;
+        }
+
+        .project-card-back {
+            transform: rotateY(180deg);
+            text-align: center;
+            color: #444;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .project-card-3d.flipped .project-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .project-card-3d.active {
+            transform: translateX(-50%) translateZ(200px) rotateY(0deg);
+            opacity: 1;
+            z-index: 3;
+        }
+
+        .project-card-3d.left {
+            transform: translateX(-180%) translateZ(0) rotateY(30deg);
+            opacity: 0.5;
+            z-index: 2;
+        }
+
+        .project-card-3d.right {
+            transform: translateX(80%) translateZ(0) rotateY(-30deg);
+            opacity: 0.5;
+            z-index: 2;
+        }
+
+        .project-card-3d.inactive {
+            opacity: 0;
+            transform: translateX(-50%) translateZ(-300px) rotateY(0deg);
+            z-index: 1;
         }
 
         /* About Section */
@@ -283,14 +388,21 @@
         .about-content {
             max-width: 900px;
             margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-areas:
+                "intro intro"
+                "represents represents"
+                "essence essence"
+                "core personality"
+                "mission vision"
+                "purpose purpose";
+            gap: 20px;
         }
 
         .about-block {
-            padding: 20px 0;
-            background: white;
+            background: #d6d6d6;
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
             padding: 30px;
         }
 
@@ -329,6 +441,42 @@
         .paradi-represents ul,
         .core-values ul {
             padding-left: 20px;
+        }
+
+        .brand-intro {
+            grid-area: intro;
+        }
+
+        .paradi-represents {
+            grid-area: represents;
+        }
+
+        .brand-essence {
+            grid-area: essence;
+        }
+
+        .core-values {
+            grid-area: core;
+            width: 140%;
+        }
+
+        .brand-personality {
+            grid-area: personality;
+            width: 60%;
+            margin-left: auto;
+            margin-right: 0;
+        }
+
+        .mission-statement {
+            grid-area: mission;
+        }
+
+        .vision-statement {
+            grid-area: vision;
+        }
+
+        .brand-purpose {
+            grid-area: purpose;
         }
 
         /* Footer */
@@ -388,7 +536,6 @@
             letter-spacing: 1px;
             transition: opacity 0.3s ease;
             color: white;
-            font-family: 'Times New Roman', Times, serif;
         }
 
         .bubble:hover .name {
@@ -418,6 +565,28 @@
 
             section {
                 padding: 40px 20px;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "intro"
+                    "represents"
+                    "essence"
+                    "core"
+                    "personality"
+                    "mission"
+                    "vision"
+                    "purpose";
+            }
+
+            .brand-personality {
+                width: 100%;
+                margin: 0 auto;
+            }
+
+            .core-values {
+                width: 100%;
             }
         }
 
@@ -470,7 +639,6 @@
             <div class="section-container">
                 <div class="hero-inner">
                     <h2>Welcome to PARADI</h2>
-                    <p>Your trusted partner for professional web development solutions.</p>
                     <p>Providing Solutions to Every Problem.</p>
                 </div>
             </div>
@@ -507,19 +675,46 @@
         <section id="projects" class="projects">
             <div class="section-container">
                 <h2>Our Projects</h2>
-                <p>Showcase of our recent work and achievements.</p>
-                <div class="projects-grid">
-                    <div class="project-card">
-                        <h3>E-commerce Platform Revamp</h3>
-                        <p>Modernized a retail brand's storefront with a new headless architecture, resulting in a 35% conversion lift.</p>
+                <div class="projects-carousel">
+                    <div class="project-card-3d" data-project="0">
+                        <div class="project-card-inner">
+                            <div class="project-card-front">
+                                <h3>Sample Project 1: E-commerce Platform Revamp</h3>
+                            </div>
+                            <div class="project-card-back">
+                                <p>Modernized a retail brand's storefront with a new headless architecture, resulting in a 35% conversion lift.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="project-card">
-                        <h3>City Tourism Portal</h3>
-                        <p>Designed and built a responsive tourism hub that serves 50k+ monthly visitors with real-time itinerary planning.</p>
+                    <div class="project-card-3d" data-project="1">
+                        <div class="project-card-inner">
+                            <div class="project-card-front">
+                                <h3>Sample Project 2: City Tourism Portal</h3>
+                            </div>
+                            <div class="project-card-back">
+                                <p>Designed and built a responsive tourism hub that serves 50k+ monthly visitors with real-time itinerary planning.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="project-card">
-                        <h3>Smart Facilities Dashboard</h3>
-                        <p>Delivered a monitoring app for a property group, consolidating IoT data streams into one secure control center.</p>
+                    <div class="project-card-3d" data-project="2">
+                        <div class="project-card-inner">
+                            <div class="project-card-front">
+                                <h3>Sample Project 3: Smart Facilities Dashboard</h3>
+                            </div>
+                            <div class="project-card-back">
+                                <p>Delivered a monitoring app for a property group, consolidating IoT data streams into one secure control center.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card-3d" data-project="1">
+                        <div class="project-card-inner">
+                            <div class="project-card-front">
+                                <h3>Sample Project 4</h3>
+                            </div>
+                            <div class="project-card-back">
+                                <p>Sample Project 4 description.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -562,7 +757,13 @@
 
                     <div class="about-block brand-personality">
                         <h5>Brand Personality</h5>
-                        <p>Professional, modern, reliable, adaptable, and creative.</p>
+                        <ul>
+                            <li>Professional</li>
+                            <li>Modern</li>
+                            <li>Reliable</li>
+                            <li>Adaptable</li>
+                            <li>Creative</li>
+                        </ul>
                     </div>
 
                     <div class="about-block mission-statement">
@@ -628,8 +829,18 @@
             }
         });
 
-        // Smooth scrolling and show h2 on navigation click
-        document.querySelectorAll('.nav-container a[href^="#"]').forEach(anchor => {
+        // Track scroll direction for fade-out-on-top logic
+        let lastScrollY = window.scrollY || window.pageYOffset;
+        let scrollDirection = 'down';
+
+        window.addEventListener('scroll', () => {
+            const currentY = window.scrollY || window.pageYOffset;
+            scrollDirection = currentY > lastScrollY ? 'down' : 'up';
+            lastScrollY = currentY;
+        });
+
+        // Smooth scrolling and show h2 on navigation click (nav menu only)
+        document.querySelectorAll('.nav-menu a[href^="#"], .contact-btn a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 const href = this.getAttribute('href');
                 
@@ -656,9 +867,13 @@
                             h2.classList.add('visible');
                         }
                         
-                        // Make section visible immediately
-                        target.style.opacity = '1';
-                        target.style.transform = 'translateY(0)';
+                        // Reset fade classes on all sections and cards
+                        document.querySelectorAll('.fade-section').forEach(el => {
+                            el.classList.remove('in-view', 'leaving-up');
+                        });
+
+                        // Make target section visible immediately (will still animate)
+                        target.classList.add('fade-section', 'in-view');
                         
                         // Smooth scroll to section
                         const headerHeight = document.querySelector('header').offsetHeight;
@@ -675,20 +890,31 @@
 
         // Scroll animations
         const observerOptions = {
-            threshold: 0.5,
+            threshold: 0.3,
             rootMargin: '0px 0px 0px 0px'
         };
 
         const observer = new IntersectionObserver(function(entries) {
             entries.forEach(entry => {
+                const el = entry.target;
+
                 if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                    
-                    // Show the current section's h2
-                    const h2 = entry.target.querySelector('h2');
-                    if (h2) {
-                        h2.classList.add('visible');
+                    el.classList.add('in-view');
+                    el.classList.remove('leaving-up');
+
+                    // Show the current section's h2 when it fades in
+                    if (el.tagName === 'SECTION') {
+                        const h2 = el.querySelector('h2');
+                        if (h2) {
+                            h2.classList.add('visible');
+                        }
+                    }
+                } else {
+                    // When scrolling down and element leaves at the top, fade it out upwards
+                    const rect = entry.boundingClientRect;
+                    if (scrollDirection === 'down' && rect.top < 0) {
+                        el.classList.remove('in-view');
+                        el.classList.add('leaving-up');
                     }
                 }
             });
@@ -696,19 +922,55 @@
 
         // Animate sections
         document.querySelectorAll('section').forEach(section => {
-            section.style.opacity = '0';
-            section.style.transform = 'translateY(20px)';
-            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            section.classList.add('fade-section');
             observer.observe(section);
         });
 
-        // Animate service cards
+        // Animate service cards with slight stagger
         document.querySelectorAll('.service-card').forEach((el, index) => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
-            el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+            el.classList.add('fade-section');
+            el.style.transitionDelay = '0.1s';
             observer.observe(el);
         });
+
+        // 3D Projects carousel with flip-on-click
+        const projectCards = Array.from(document.querySelectorAll('.projects-carousel .project-card-3d'));
+        let currentProjectIndex = 0;
+
+        function updateProjectCarousel() {
+            if (!projectCards.length) return;
+            const lastIndex = projectCards.length - 1;
+
+            projectCards.forEach((card, index) => {
+                card.classList.remove('active', 'left', 'right', 'inactive');
+
+                if (index === currentProjectIndex) {
+                    card.classList.add('active');
+                } else if (index === (currentProjectIndex - 1 + projectCards.length) % projectCards.length) {
+                    card.classList.add('left');
+                } else if (index === (currentProjectIndex + 1) % projectCards.length) {
+                    card.classList.add('right');
+                } else {
+                    card.classList.add('inactive');
+                }
+            });
+        }
+
+        projectCards.forEach((card, index) => {
+            card.addEventListener('click', () => {
+                // If this card is not active, bring it to the front
+                if (index !== currentProjectIndex) {
+                    currentProjectIndex = index;
+                    projectCards.forEach(c => c.classList.remove('flipped'));
+                    updateProjectCarousel();
+                } else {
+                    // If already active, flip to show/hide details
+                    card.classList.toggle('flipped');
+                }
+            });
+        });
+
+        updateProjectCarousel();
     </script>
 </body>
 </html>
