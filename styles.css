@@ -21,18 +21,35 @@ header {
     right: 0;
     z-index: 10000;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    transition: all 0.5s ease-in-out;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header.header-scrolled .logo {
+    font-size: 36px;
+}
+
+header.header-scrolled .logo-container {
+    padding: 8px 20px 4px;
+}
+
+header.header-scrolled .nav-container {
+    padding: 4px 20px 8px;
+}
+
+header.header-scrolled .nav-menu a {
+    font-size: 14px;
+}
+
+header.header-scrolled .contact-btn a {
+    padding: 6px 12px;
+    font-size: 13px;
 }
 
 header.header-scrolled {
-    padding: 10px 0;
-}
-
-header.header-scrolled .logo-container,
-header.header-scrolled .tagline-container,
-header.header-scrolled .nav-container {
-    padding-top: 0;
-    padding-bottom: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .logo-container {
@@ -146,7 +163,7 @@ main {
 }
 
 .hero {
-    background: linear-gradient(360deg, #1a1a1a 0%, #333 100%);
+    background: linear-gradient(360deg, #919090 50%, #fffdfd 50%);
     color: white;
     padding: 100px 20px;
     text-align: center;
@@ -190,6 +207,7 @@ section h2 {
     margin-bottom: 30px;
     color: #222;
     text-align: center;
+    display: none;
 }
 
 .home {

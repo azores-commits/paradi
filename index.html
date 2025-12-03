@@ -4,7 +4,448 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PARADI - Providing Solutions to Every Problem</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #d6d6d6;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: rgb(70, 69, 69);
+            padding: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        header.header-scrolled {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        header.header-scrolled .logo {
+            font-size: 36px;
+        }
+
+        header.header-scrolled .logo-container {
+            padding: 8px 20px 4px;
+        }
+
+        header.header-scrolled .nav-container {
+            padding: 4px 20px 8px;
+        }
+
+        header.header-scrolled .nav-menu a {
+            font-size: 14px;
+        }
+
+        header.header-scrolled .contact-btn a {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .logo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px 5px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            transition: padding 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5px 20px 15px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 20px;
+            transition: padding 0.3s ease;
+        }
+
+        .logo {
+            font-size: 60px;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 2px;
+            text-shadow: 
+                -1px -1px 0 black,
+                1px -1px 0 black,
+                -1px 1px 0 black,
+                1px 1px 0 black;
+            font-family: 'Times New Roman', Times, serif;
+            transition: font-size 0.3s ease;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 18px;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a:hover {
+            color: #999;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #999;
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .contact-btn a {
+            background-color: #555;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .contact-btn a:hover {
+            background-color: #777;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+        }
+
+        .hero {
+            background: linear-gradient(360deg, #1a1a1a 0%, #333 100%);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 15px;
+        }
+
+        .hero-inner h2 {
+            font-size: 36px;
+            font-weight: 600;
+            margin: 0;
+            color: #ffffff;
+        }
+
+        .hero-inner p {
+            font-size: 18px;
+            color: #d6d6d6;
+            margin: 0;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 60px 20px;
+            min-height: 100vh;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section h2 {
+            font-size: 36px;
+            margin-bottom: 40px;
+            color: #222;
+            text-align: center;
+            opacity: 0; /* Hidden by default */
+            transition: opacity 0.6s ease;
+        }
+
+        section h2.visible {
+            opacity: 1; /* Show when visible class is added */
+        }
+
+        .services {
+            background-color: #d6d6d6;
+        }
+
+        .services-grid,
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card,
+        .project-card {
+            background-color: white;
+            padding: 40px 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .service-card:hover,
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .service-card h3,
+        .project-card h3 {
+            color: #222;
+            font-size: 22px;
+            margin-bottom: 15px;
+            transition: opacity 0.3s ease;
+        }
+
+        .service-card p,
+        .project-card p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+        }
+
+        .service-card:hover h3,
+        .project-card:hover h3 {
+            opacity: 0;
+        }
+
+        .service-card:hover p,
+        .project-card:hover p {
+            opacity: 1;
+        }
+
+        /* Projects Section */
+        .projects {
+            background-color: #d6d6d6;
+        }
+
+        .projects h2,
+        .projects p {
+            text-align: center;
+            color: #333;
+        }
+
+        /* About Section */
+        .about {
+            background-color: #d6d6d6;
+        }
+
+        .about-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .about-block {
+            padding: 20px 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+            padding: 30px;
+        }
+
+        .about-content h4 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .about-content h5 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .about-content p {
+            color: #333;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .about-content ul {
+            list-style-position: inside;
+            margin-bottom: 20px;
+        }
+
+        .about-content li {
+            color: #333;
+            text-align: left;
+            padding-left: 40px;
+            margin-bottom: 8px;
+        }
+
+        .paradi-represents ul,
+        .core-values ul {
+            padding-left: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #222;
+            color: white;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-content p {
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* Team Bubbles */
+        .team-bubbles {
+            display: flex;
+            gap: 30px;
+            justify-content: flex-end;
+        }
+
+        .bubble {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #555 0%, #333 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 2px solid #666;
+        }
+
+        .bubble:hover {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, #777 0%, #555 100%);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .bubble .name {
+            opacity: 0;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: opacity 0.3s ease;
+            color: white;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .bubble:hover .name {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                gap: 12px;
+                font-size: 14px;
+            }
+
+            .hero {
+                padding: 80px 20px;
+                min-height: 300px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .team-bubbles {
+                justify-content: center;
+            }
+
+            section {
+                padding: 40px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .contact-btn a {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .nav-menu {
+                gap: 8px;
+                font-size: 12px;
+            }
+
+            .logo {
+                font-size: 40px;
+            }
+
+            .bubble {
+                width: 60px;
+                height: 60px;
+            }
+
+            .team-bubbles {
+                gap: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -26,95 +467,120 @@
 
     <main>
         <section id="home" class="hero">
-            <div class="hero-inner">
-                <h2>Welcome to PARADI</h2>
-                <p>Your trusted partner for professional web development solutions./tagline?>Providing Solutions to Every Problem.</p>
+            <div class="section-container">
+                <div class="hero-inner">
+                    <h2>Welcome to PARADI</h2>
+                    <p>Your trusted partner for professional web development solutions.</p>
+                    <p>Providing Solutions to Every Problem.</p>
+                </div>
             </div>
         </section>
 
         <section id="services" class="services">
-            <h2>Our Services</h2>
-            <div class="services-grid">
-                <div class="service-card">
-                    <h3>Web Development</h3>
-                    <p>Custom web solutions tailored to your business needs.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Web Design</h3>
-                    <p>Beautiful and intuitive user interfaces.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Consulting</h3>
-                    <p>Expert advice for your digital transformation.</p>
-                </div>
-                <div class="service-card">
-                    <h3>SEO & SEM</h3>
-                    <p>Improve your online visibility and ranking on search engines through tailored Search Engine Optimization and Search Engine Marketing strategies.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Other Services</h3>
-                    <p>Computer hardware/software repairs, CCTV installations, and Piso-WiFi installations </p>
+            <div class="section-container">
+                <h2>Our Services</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <h3>Web Development</h3>
+                        <p>Custom web solutions tailored to your business needs.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>Web Design</h3>
+                        <p>Beautiful and intuitive user interfaces.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>Consulting</h3>
+                        <p>Expert advice for your digital transformation.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>SEO & SEM</h3>
+                        <p>Improve your online visibility and ranking on search engines through tailored Search Engine Optimization and Search Engine Marketing strategies.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>Other Services</h3>
+                        <p>Computer hardware/software repairs, CCTV installations, and Piso-WiFi installations.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section id="projects" class="projects">
-            <h2>Our Projects</h2>
-            <p>Showcase of our recent work and achievements.</p>
+            <div class="section-container">
+                <h2>Our Projects</h2>
+                <p>Showcase of our recent work and achievements.</p>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <h3>E-commerce Platform Revamp</h3>
+                        <p>Modernized a retail brand's storefront with a new headless architecture, resulting in a 35% conversion lift.</p>
+                    </div>
+                    <div class="project-card">
+                        <h3>City Tourism Portal</h3>
+                        <p>Designed and built a responsive tourism hub that serves 50k+ monthly visitors with real-time itinerary planning.</p>
+                    </div>
+                    <div class="project-card">
+                        <h3>Smart Facilities Dashboard</h3>
+                        <p>Delivered a monitoring app for a property group, consolidating IoT data streams into one secure control center.</p>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section id="about" class="about">
-            <h2>About Us</h2>
-            <section class="brand-intro">
-                <h4>PARADI — Professional Apps, Responsive Design &amp; IT Services</h4>
-                <p>PARADI stands for Professional Apps, Responsive Design &amp; IT Services — a digital agency dedicated to delivering reliable, modern, and highly functional technology solutions. The name reflects our commitment to professionalism, user-first design, and end-to-end digital services that help businesses establish a strong presence in the digital world.</p>
-            </section>
+            <div class="section-container">
+                <h2>About Us</h2>
+                <div class="about-content">
+                    <div class="about-block brand-intro">
+                        <h4>PARADI — Professional Apps, Responsive Design & IT Services</h4>
+                        <p>PARADI stands for Professional Apps, Responsive Design & IT Services — a digital agency dedicated to delivering reliable, modern, and highly functional technology solutions. The name reflects our commitment to professionalism, user-first design, and end-to-end digital services that help businesses establish a strong presence in the digital world.</p>
+                    </div>
 
-            <section class="paradi-represents">
-                <h4>PARADI represents:</h4>
-                <ul>
-                        <li>Professionalism in every project</li>
-                        <li>Responsiveness in both design and service</li>
-                        <li>Expert IT Solutions grounded in modern technology</li>
-                        <li>Digital empowerment for businesses of all sizes</li>
-                </ul>
-                <p>It communicates that our agency is a complete digital partner—not just a service provider, but a long-term collaborator in growth and innovation.</p>
-            </section>
+                    <div class="about-block paradi-represents">
+                        <h4>PARADI represents:</h4>
+                        <ul>
+                            <li>Professionalism in every project</li>
+                            <li>Responsiveness in both design and service</li>
+                            <li>Expert IT Solutions grounded in modern technology</li>
+                            <li>Digital empowerment for businesses of all sizes</li>
+                        </ul>
+                        <p>It communicates that our agency is a complete digital partner—not just a service provider, but a long-term collaborator in growth and innovation.</p>
+                    </div>
 
-            <section class="brand-essence">
-                <h4>✨ Brand Essence</h4>
-            </section>
+                    <div class="about-block brand-essence">
+                        <h4>✨ Brand Essence</h4>
+                    </div>
 
-            <section class="core-values">
-                <h5>Core Values</h5>
-                <ul>
-                    <li><strong>Excellence</strong> — Delivering premium digital outputs</li>
-                    <li><strong>Responsiveness</strong> — Designs that adapt and experiences that flow</li>
-                    <li><strong>Integrity</strong> — Honest, dependable service</li>
-                    <li><strong>Innovation</strong> — Forward-thinking digital solutions</li>
-                    <li><strong>Collaboration</strong> — Building meaningful partnerships</li>
-                </ul>
-            </section>
+                    <div class="about-block core-values">
+                        <h5>Core Values</h5>
+                        <ul>
+                            <li><strong>Excellence</strong> — Delivering premium digital outputs</li>
+                            <li><strong>Responsiveness</strong> — Designs that adapt and experiences that flow</li>
+                            <li><strong>Integrity</strong> — Honest, dependable service</li>
+                            <li><strong>Innovation</strong> — Forward-thinking digital solutions</li>
+                            <li><strong>Collaboration</strong> — Building meaningful partnerships</li>
+                        </ul>
+                    </div>
 
-            <section class="brand-personality">
-                <h5>Brand Personality</h5>
-                <p>Professional, modern, reliable, adaptable, and creative.</p>
-            </section>
+                    <div class="about-block brand-personality">
+                        <h5>Brand Personality</h5>
+                        <p>Professional, modern, reliable, adaptable, and creative.</p>
+                    </div>
 
-            <section class="mission-statement">
-                <h4>🎯 Mission</h4>
-                <p>To deliver professional, user-focused digital solutions—ranging from apps and responsive web design to full IT services—that help businesses enhance their digital presence, streamline their operations, and achieve measurable growth.</p>
-            </section>
+                    <div class="about-block mission-statement">
+                        <h4>🎯 Mission</h4>
+                        <p>To deliver professional, user-focused digital solutions—ranging from apps and responsive web design to full IT services—that help businesses enhance their digital presence, streamline their operations, and achieve measurable growth.</p>
+                    </div>
 
-            <section class="vision-statement">
-                <h4>🌍 Vision</h4>
-                <p>To become a trusted digital agency known for excellence in responsive design, innovative applications, and reliable IT services, empowering businesses globally to thrive through technology and creative digital transformation.</p>
-            </section>
+                    <div class="about-block vision-statement">
+                        <h4>🌍 Vision</h4>
+                        <p>To become a trusted digital agency known for excellence in responsive design, innovative applications, and reliable IT services, empowering businesses globally to thrive through technology and creative digital transformation.</p>
+                    </div>
 
-            <section class="brand-purpose">
-                <h4>🌱 Brand Purpose</h4>
-                <p>To simplify digital solutions and provide businesses with the tools, technology, and support needed to succeed in today’s fast-moving digital landscape.</p>
-            </section>
+                    <div class="about-block brand-purpose">
+                        <h4>🌱 Brand Purpose</h4>
+                        <p>To simplify digital solutions and provide businesses with the tools, technology, and support needed to succeed in today's fast-moving digital landscape.</p>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 
@@ -135,6 +601,114 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // Adjust body padding for fixed header
+        function adjustBodyPaddingForHeader() {
+            const header = document.querySelector('header');
+            if (!header) return;
+            const headerHeight = header.offsetHeight;
+            document.body.style.paddingTop = headerHeight + 'px';
+        }
+
+        window.addEventListener('load', adjustBodyPaddingForHeader);
+        window.addEventListener('resize', function() {
+            clearTimeout(window._headerResizeTimer);
+            window._headerResizeTimer = setTimeout(adjustBodyPaddingForHeader, 80);
+        });
+
+        // Header shrink on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (scrollTop > 50) {
+                header.classList.add('header-scrolled');
+            } else {
+                header.classList.remove('header-scrolled');
+            }
+        });
+
+        // Smooth scrolling and show h2 on navigation click
+        document.querySelectorAll('.nav-container a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                
+                // Handle contact button separately
+                if (href === '#contact') {
+                    e.preventDefault();
+                    alert('Contact form would open here or redirect to contact page.\n\nEmail: contact@paradi.com\nPhone: +1 (555) 123-4567');
+                    return;
+                }
+                
+                if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    
+                    if (target) {
+                        // Hide all h2 headings
+                        document.querySelectorAll('section h2').forEach(h2 => {
+                            h2.classList.remove('visible');
+                        });
+                        
+                        // Show the target section's h2
+                        const h2 = target.querySelector('h2');
+                        if (h2) {
+                            h2.classList.add('visible');
+                        }
+                        
+                        // Make section visible immediately
+                        target.style.opacity = '1';
+                        target.style.transform = 'translateY(0)';
+                        
+                        // Smooth scroll to section
+                        const headerHeight = document.querySelector('header').offsetHeight;
+                        const targetPosition = target.offsetTop - headerHeight - 20;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px 0px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    
+                    // Show the current section's h2
+                    const h2 = entry.target.querySelector('h2');
+                    if (h2) {
+                        h2.classList.add('visible');
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Animate sections
+        document.querySelectorAll('section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+
+        // Animate service cards
+        document.querySelectorAll('.service-card').forEach((el, index) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+            observer.observe(el);
+        });
+    </script>
 </body>
 </html>

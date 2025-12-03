@@ -1,2 +1,4 @@
-- [ ] Add scroll event listener in script.js to toggle 'header-scrolled' class on header when scrolled
-- [ ] Update CSS for .header-scrolled to make header thinner and align nav-container with logo
+- [x] Update script.js: Change 'shrink' class to 'header-scrolled' in the scroll event listener
+- [x] Update styles.css: Change .shrink to .header-scrolled, reduce padding for thinner header, add flexbox to header for logo and nav alignment, change transition to 0.5s ease-in-out
+- [x] Update index.html: Change .shrink to .header-scrolled in inline styles
+- [x] Mark original TODO tasks as completed

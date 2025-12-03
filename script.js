@@ -6,10 +6,23 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             e.preventDefault();
             const target = document.querySelector(href);
             if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+                // Hide all section h2
+                document.querySelectorAll('section h2').forEach(h2 => h2.style.display = 'none');
+                // Show the target section's h2
+                const h2 = target.querySelector('h2');
+                if (h2) {
+                    h2.style.display = 'block';
+                    // Show the section immediately on click
+                    target.style.opacity = '1';
+                    target.style.transform = 'translateY(0)';
+                    // Scroll to the h2 position, accounting for fixed header
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const targetPosition = h2.offsetTop - headerHeight - 100; // Sufficient margin to ensure h2 is visible below header
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
             }
         }
     });
@@ -94,3 +107,13 @@ window.addEventListener('resize', function() {
     window._headerResizeTimer = setTimeout(adjustBodyPaddingForHeader, 80);
 });
 
+window.onscroll = function() {
+  const header = document.querySelector('header');
+  const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+
+  if (scrollTop > 50) {
+    header.classList.add("header-scrolled");
+  } else {
+    header.classList.remove("header-scrolled");
+  }
+};
