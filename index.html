@@ -946,6 +946,12 @@
             observer.observe(el);
         });
 
+        // Animate each about block individually instead of the whole container
+        document.querySelectorAll('.about-content .about-block').forEach((el) => {
+            el.classList.add('fade-section');
+            observer.observe(el);
+        });
+
         // 3D Projects carousel with flip-on-click
         const projectCards = Array.from(document.querySelectorAll('.projects-carousel .project-card-3d'));
         let currentProjectIndex = 0;
