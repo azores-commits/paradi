@@ -1,0 +1,4 @@
+- [x] Update script.js: Change 'shrink' class to 'header-scrolled' in the scroll event listener
+- [x] Update styles.css: Change .shrink to .header-scrolled, reduce padding for thinner header, add flexbox to header for logo and nav alignment, change transition to 0.5s ease-in-out
+- [x] Update index.html: Change .shrink to .header-scrolled in inline styles
+- [x] Mark original TODO tasks as completed
