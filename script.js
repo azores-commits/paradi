@@ -80,27 +80,33 @@ document.querySelectorAll('.service-card').forEach((el) => {
     observer.observe(el);
 });
 
-// Animate all text elements and list items individually in About section
-document.querySelectorAll('.about-content > p, .about-content > h3, .about-content > h4, .about-content > h5, .about-content > ul > li').forEach((el, index) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(15px)';
-    el.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
-    observer.observe(el);
-});
+
 
 // Adjust body padding-top to avoid content being hidden under fixed header
 function adjustBodyPaddingForHeader() {
-    const header = document.querySelector('header');
-    if (!header) return;
-    // get computed height including margins
-    const rect = header.getBoundingClientRect();
-    // use offsetHeight which includes padding and borders
-    const headerHeight = header.offsetHeight;
-    document.body.style.paddingTop = headerHeight + 'px';
+    // Set fixed padding to match the shrunk header height to prevent jumps
+    document.body.style.paddingTop = '60px';
+}
+
+// Show home section h2 on load to match "Home" nav click behavior
+function showHomeOnLoad() {
+    const homeSection = document.querySelector('#home');
+    if (homeSection) {
+        const h2 = homeSection.querySelector('h2');
+        if (h2) {
+            h2.style.display = 'block';
+        }
+        // Also ensure the section is visible
+        homeSection.style.opacity = '1';
+        homeSection.style.transform = 'translateY(0)';
+    }
 }
 
 // Run on load and update on resize
-window.addEventListener('load', adjustBodyPaddingForHeader);
+window.addEventListener('load', function() {
+    adjustBodyPaddingForHeader();
+    showHomeOnLoad();
+});
 window.addEventListener('resize', function() {
     // small debounce
     clearTimeout(window._headerResizeTimer);
@@ -113,7 +119,6 @@ window.onscroll = function() {
 
   if (scrollTop > 50) {
     header.classList.add("header-scrolled");
-  } else {
-    header.classList.remove("header-scrolled");
   }
+  // Removed the else clause to keep the header shrunk once scrolled
 };
