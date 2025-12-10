@@ -21,63 +21,41 @@
         /* Header Styles */
         header {
             background-color: rgb(70, 69, 69);
-            padding: 0;
+            padding: 10px;
             position: fixed;
             top: 0;
-            left: 0;
-            right: 0;
+            width: 100%;
+            height: calc(60px + 2cm); /* Taller height at the top */
             z-index: 10000;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            grid-template-rows: 1fr;
             align-items: center;
         }
 
-        header.header-scrolled {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
 
-        header.header-scrolled .logo {
-            font-size: 36px;
-        }
-
-        header.header-scrolled .logo-container {
-            padding: 8px 20px 4px;
-        }
-
-        header.header-scrolled .nav-container {
-            padding: 4px 20px 8px;
-        }
-
-        header.header-scrolled .nav-menu a {
-            font-size: 14px;
-        }
-
-        header.header-scrolled .contact-btn a {
-            padding: 6px 12px;
-            font-size: 13px;
-        }
 
         .logo-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 15px 20px 5px;
+            padding: 5px 20px;
             display: flex;
             justify-content: flex-start;
             align-items: center;
             transition: padding 0.3s ease;
+            grid-row: 1;
+            grid-column: 1;
         }
 
         .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 5px 20px 15px;
+            padding: 5px 20px;
             display: flex;
             justify-content: flex-end;
             align-items: center;
             gap: 20px;
             transition: padding 0.3s ease;
+            grid-row: 1;
+            grid-column: 2;
         }
 
         .logo {
@@ -85,16 +63,15 @@
             font-weight: bold;
             color: #ffd700;
             letter-spacing: 2px;
-            text-shadow: 
+            text-shadow:
                 -1px -1px 0 black,
                 1px -1px 0 black,
                 -1px 1px 0 black,
                 1px 1px 0 black;
-            font-family: 'Times New Roman', Times, serif;
-            transition: font-size 0.3s ease;
-        }
+    font-family: 'Avallon Caps', sans-serif;
+}
 
-        .nav-menu {
+.nav-menu {
             display: flex;
             gap: 18px;
         }
@@ -138,6 +115,21 @@
 
         .contact-btn a:hover {
             background-color: #777;
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            transition: all 0.3s ease;
         }
 
         /* Main Content */
@@ -545,67 +537,8 @@
             opacity: 1;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-menu {
-                gap: 12px;
-                font-size: 14px;
-            }
-
-            .hero {
-                padding: 80px 20px;
-                min-height: 300px;
-            }
-
-            .footer-content {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .team-bubbles {
-                justify-content: center;
-            }
-
-            section {
-                padding: 40px 20px;
-            }
-
-            .about-content {
-                grid-template-columns: 1fr;
-                grid-template-areas:
-                    "intro"
-                    "represents"
-                    "essence"
-                    "core"
-                    "personality"
-                    "mission"
-                    "vision"
-                    "purpose";
-            }
-
-            .brand-personality {
-                width: 100%;
-                margin: 0 auto;
-            }
-
-            .core-values {
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .contact-btn a {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-
-            .nav-menu {
-                gap: 8px;
-                font-size: 12px;
-            }
-
-            .logo {
-                font-size: 40px;
+        /* Responsive 
+        @media (max-width: :pn:                 font-size: 40px;
             }
 
             .bubble {
@@ -624,16 +557,21 @@
         <div class="logo-container">
             <div class="logo">PARADI</div>
         </div>
-        <div class="nav-container">
+        <div class="nav-container" id="navContainer">
             <nav class="nav-menu">
-                <a href="#home">Home</a>
-                <a href="#services">Services</a>
-                <a href="#projects">Projects</a>
-                <a href="#about">About Us</a>
+                <a href="#home" onclick="closeMenu()">Home</a>
+                <a href="#services" onclick="closeMenu()">Services</a>
+                <a href="#projects" onclick="closeMenu()">Projects</a>
+                <a href="#about" onclick="closeMenu()">About Us</a>
             </nav>
             <div class="contact-btn">
-                <a href="#contact">Contact Us</a>
+                <a href="#contact" onclick="closeMenu()">Contact Us</a>
             </div>
+        </div>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
     </header>
 
@@ -648,8 +586,8 @@
         </section>
 
         <section id="services" class="services">
+            <h2>Our Services</h2>
             <div class="section-container">
-                <h2>Our Services</h2>
                 <div class="services-grid">
                     <div class="service-card">
                         <h3>Web Development</h3>
@@ -676,8 +614,8 @@
         </section>
 
         <section id="projects" class="projects">
+            <h2>Our Projects</h2>
             <div class="section-container">
-                <h2>Our Projects</h2>
                 <div class="projects-carousel">
                     <div class="project-card-3d" data-project="0">
                         <div class="project-card-inner">
@@ -724,8 +662,8 @@
         </section>
 
         <section id="about" class="about">
+            <h2>About Us</h2>
             <div class="section-container">
-                <h2>About Us</h2>
                 <div class="about-content">
                     <div class="about-block brand-intro">
                         <h4>PARADI — Professional Apps, Responsive Design & IT Services</h4>
@@ -806,12 +744,11 @@
     </footer>
 
     <script>
-        // Adjust body padding for fixed header
+        let currentSectionId = null; // Track the currently active section
+
+        // Adjust body padding for fixed header (fixed to max height to prevent position shifts)
         function adjustBodyPaddingForHeader() {
-            const header = document.querySelector('header');
-            if (!header) return;
-            const headerHeight = header.offsetHeight;
-            document.body.style.paddingTop = headerHeight + 'px';
+            document.body.style.paddingTop = 'calc(60px + 2cm)';
         }
 
         window.addEventListener('load', adjustBodyPaddingForHeader);
@@ -820,20 +757,7 @@
             window._headerResizeTimer = setTimeout(adjustBodyPaddingForHeader, 80);
         });
 
-        // Header shrink on scroll
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('header');
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-            if (scrollTop > 50) {
-                header.classList.add('header-scrolled');
-            } else {
-                header.classList.remove('header-scrolled');
-            }
-
-            // Recalculate body padding when header size changes due to scroll
-            adjustBodyPaddingForHeader();
-        });
 
         // Track scroll direction for fade-out-on-top logic
         let lastScrollY = window.scrollY || window.pageYOffset;
@@ -849,42 +773,71 @@
         document.querySelectorAll('.nav-menu a[href^="#"], .contact-btn a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 const href = this.getAttribute('href');
-                
+
                 // Handle contact button separately
                 if (href === '#contact') {
                     e.preventDefault();
                     alert('Contact form would open here or redirect to contact page.\n\nEmail: contact@paradi.com\nPhone: +1 (555) 123-4567');
                     return;
                 }
-                
+
                 if (href !== '#') {
                     e.preventDefault();
                     const target = document.querySelector(href);
-                    
+
                     if (target) {
+                        const targetId = href.slice(1); // e.g., 'services'
+
+                        // Ensure header is at max height to prevent shifting
+                        const header = document.querySelector('header');
+                        header.classList.remove('header-scrolled');
+
+                        // If clicking the same section, just scroll without resetting
+                        if (currentSectionId === targetId) {
+                            const headerHeight = header.offsetHeight; // Get current header height
+                            const targetPosition = target.offsetTop - headerHeight;
+                            window.scrollTo({
+                                top: targetPosition,
+                                behavior: 'smooth'
+                            });
+                            return;
+                        }
+
+                        // Update current section
+                        currentSectionId = targetId;
+
                         // Hide all h2 headings
                         document.querySelectorAll('section h2').forEach(h2 => {
                             h2.classList.remove('visible');
                         });
-                        
+
                         // Show the target section's h2
                         const h2 = target.querySelector('h2');
                         if (h2) {
                             h2.classList.add('visible');
                         }
-                        
-                        // Reset fade classes on all sections and cards
+
+                        // Reset fade classes on all sections and cards, but keep manually set ones
                         document.querySelectorAll('.fade-section').forEach(el => {
-                            el.classList.remove('in-view', 'leaving-up');
+                            if (el.id !== currentSectionId) {
+                                el.classList.remove('in-view', 'leaving-up', 'manually-visible');
+                            }
                         });
 
                         // Make target section visible immediately (will still animate)
-                        target.classList.add('fade-section', 'in-view');
-                        
+                        target.classList.add('fade-section', 'in-view', 'manually-visible');
+
+                        // For About section, also make the blocks visible immediately
+                        if (target.id === 'about') {
+                            document.querySelectorAll('.about-content .about-block').forEach(block => {
+                                block.classList.add('in-view');
+                            });
+                        }
+
                         // Smooth scroll to section
-                        const headerHeight = document.querySelector('header').offsetHeight;
-                        const targetPosition = target.offsetTop - headerHeight - 20;
-                        
+                        const headerHeight = header.offsetHeight; // Get current header height
+                        const targetPosition = target.offsetTop - headerHeight;
+
                         window.scrollTo({
                             top: targetPosition,
                             behavior: 'smooth'
@@ -990,6 +943,17 @@
         });
 
         updateProjectCarousel();
+
+        // Mobile menu toggle functions
+        function toggleMenu() {
+            const navContainer = document.getElementById('navContainer');
+            navContainer.classList.toggle('open');
+        }
+
+        function closeMenu() {
+            const navContainer = document.getElementById('navContainer');
+            navContainer.classList.remove('open');
+        }
     </script>
 </body>
 </html>

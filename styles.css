@@ -32,7 +32,7 @@ header.header-scrolled .logo {
 }
 
 header.header-scrolled .logo-container {
-    padding: 8px 20px 4px;
+    padding: 1px 20px 1px 20px;
 }
 
 header.header-scrolled .nav-container {
@@ -50,6 +50,7 @@ header.header-scrolled .contact-btn a {
 
 header.header-scrolled {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding-bottom: 0;
 }
 
 .logo-container {
@@ -72,6 +73,7 @@ header.header-scrolled {
 .nav-container {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 5px 100px 5px 0px; /* adjusted padding for better alignment */
     padding: 0px 20px 6px 20px; /* further tightened vertical spacing */
     display: flex;
     justify-content: flex-end;
@@ -91,11 +93,12 @@ header .container {
 
 .logo {
     font-size: 60px;
+    padding: 5px 0px 5px 100px; /* adjusted padding for better alignment */
     font-weight: bold;
     font-style:normal;
     color: #ffd700;
     letter-spacing: 2px;
-    text-shadow: 
+    text-shadow:
         -1px -1px 0 black,
         1px -1px 0 black,
         -1px 1px 0 black,

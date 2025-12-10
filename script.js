@@ -1,32 +1,4 @@
-// Smooth scrolling for navigation links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        const href = this.getAttribute('href');
-        if (href !== '#' && href !== '#contact') {
-            e.preventDefault();
-            const target = document.querySelector(href);
-            if (target) {
-                // Hide all section h2
-                document.querySelectorAll('section h2').forEach(h2 => h2.style.display = 'none');
-                // Show the target section's h2
-                const h2 = target.querySelector('h2');
-                if (h2) {
-                    h2.style.display = 'block';
-                    // Show the section immediately on click
-                    target.style.opacity = '1';
-                    target.style.transform = 'translateY(0)';
-                    // Scroll to the h2 position, accounting for fixed header
-                    const headerHeight = document.querySelector('header').offsetHeight;
-                    const targetPosition = h2.offsetTop - headerHeight - 100; // Sufficient margin to ensure h2 is visible below header
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-                }
-            }
-        }
-    });
-});
+// Removed conflicting smooth scrolling logic to prevent display errors on nav menu clicks
 
 // Team bubbles interaction
 const bubbles = document.querySelectorAll('.bubble');
@@ -80,27 +52,49 @@ document.querySelectorAll('.service-card').forEach((el) => {
     observer.observe(el);
 });
 
-// Animate all text elements and list items individually in About section
-document.querySelectorAll('.about-content > p, .about-content > h3, .about-content > h4, .about-content > h5, .about-content > ul > li').forEach((el, index) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(15px)';
-    el.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
-    observer.observe(el);
-});
+
 
 // Adjust body padding-top to avoid content being hidden under fixed header
 function adjustBodyPaddingForHeader() {
     const header = document.querySelector('header');
-    if (!header) return;
-    // get computed height including margins
-    const rect = header.getBoundingClientRect();
-    // use offsetHeight which includes padding and borders
     const headerHeight = header.offsetHeight;
     document.body.style.paddingTop = headerHeight + 'px';
 }
 
+// Show home section h2 on load to match "Home" nav click behavior
+function showHomeOnLoad() {
+    const homeSection = document.querySelector('#home');
+    if (homeSection) {
+        // Hide all section h2
+        document.querySelectorAll('section h2').forEach(h2 => h2.style.display = 'none');
+        // Show the home section's h2
+        const h2 = homeSection.querySelector('h2');
+        if (h2) {
+            h2.style.display = 'block';
+            h2.classList.add('visible');
+        }
+        // Reset fade classes on all sections and cards
+        document.querySelectorAll('.fade-section').forEach(el => {
+            el.classList.remove('in-view', 'leaving-up');
+        });
+        // Make home section visible immediately
+        homeSection.classList.add('fade-section', 'in-view');
+        // Also ensure the section is visible
+        homeSection.style.opacity = '1';
+        homeSection.style.transform = 'translateY(0)';
+    }
+}
+
 // Run on load and update on resize
-window.addEventListener('load', adjustBodyPaddingForHeader);
+window.addEventListener('load', function() {
+    // Ensure header is not shrunk on page load
+    const header = document.querySelector('header');
+    header.classList.remove("header-scrolled");
+    adjustBodyPaddingForHeader();
+    showHomeOnLoad();
+    // Scroll to top to show the highest part of the page
+    window.scrollTo(0, 0);
+});
 window.addEventListener('resize', function() {
     // small debounce
     clearTimeout(window._headerResizeTimer);
@@ -116,4 +110,5 @@ window.onscroll = function() {
   } else {
     header.classList.remove("header-scrolled");
   }
+  adjustBodyPaddingForHeader();
 };
