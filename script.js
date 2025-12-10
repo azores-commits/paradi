@@ -1,32 +1,4 @@
-// Smooth scrolling for navigation links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        const href = this.getAttribute('href');
-        if (href !== '#' && href !== '#contact') {
-            e.preventDefault();
-            const target = document.querySelector(href);
-            if (target) {
-                // Hide all section h2
-                document.querySelectorAll('section h2').forEach(h2 => h2.style.display = 'none');
-                // Show the target section's h2
-                const h2 = target.querySelector('h2');
-                if (h2) {
-                    h2.style.display = 'block';
-                    // Show the section immediately on click
-                    target.style.opacity = '1';
-                    target.style.transform = 'translateY(0)';
-                    // Scroll to the h2 position, accounting for fixed header
-                    const headerHeight = document.querySelector('header').offsetHeight;
-                    const targetPosition = h2.offsetTop - headerHeight - 100; // Sufficient margin to ensure h2 is visible below header
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-                }
-            }
-        }
-    });
-});
+// Removed conflicting smooth scrolling logic to prevent display errors on nav menu clicks
 
 // Team bubbles interaction
 const bubbles = document.querySelectorAll('.bubble');
@@ -84,18 +56,29 @@ document.querySelectorAll('.service-card').forEach((el) => {
 
 // Adjust body padding-top to avoid content being hidden under fixed header
 function adjustBodyPaddingForHeader() {
-    // Set fixed padding to match the shrunk header height to prevent jumps
-    document.body.style.paddingTop = '60px';
+    const header = document.querySelector('header');
+    const headerHeight = header.offsetHeight;
+    document.body.style.paddingTop = headerHeight + 'px';
 }
 
 // Show home section h2 on load to match "Home" nav click behavior
 function showHomeOnLoad() {
     const homeSection = document.querySelector('#home');
     if (homeSection) {
+        // Hide all section h2
+        document.querySelectorAll('section h2').forEach(h2 => h2.style.display = 'none');
+        // Show the home section's h2
         const h2 = homeSection.querySelector('h2');
         if (h2) {
             h2.style.display = 'block';
+            h2.classList.add('visible');
         }
+        // Reset fade classes on all sections and cards
+        document.querySelectorAll('.fade-section').forEach(el => {
+            el.classList.remove('in-view', 'leaving-up');
+        });
+        // Make home section visible immediately
+        homeSection.classList.add('fade-section', 'in-view');
         // Also ensure the section is visible
         homeSection.style.opacity = '1';
         homeSection.style.transform = 'translateY(0)';
@@ -104,8 +87,13 @@ function showHomeOnLoad() {
 
 // Run on load and update on resize
 window.addEventListener('load', function() {
+    // Ensure header is not shrunk on page load
+    const header = document.querySelector('header');
+    header.classList.remove("header-scrolled");
     adjustBodyPaddingForHeader();
     showHomeOnLoad();
+    // Scroll to top to show the highest part of the page
+    window.scrollTo(0, 0);
 });
 window.addEventListener('resize', function() {
     // small debounce
@@ -119,6 +107,8 @@ window.onscroll = function() {
 
   if (scrollTop > 50) {
     header.classList.add("header-scrolled");
+  } else {
+    header.classList.remove("header-scrolled");
   }
-  // Removed the else clause to keep the header shrunk once scrolled
+  adjustBodyPaddingForHeader();
 };

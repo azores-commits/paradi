@@ -35,31 +35,7 @@
             align-items: center;
         }
 
-        header.header-scrolled {
-            height: 60px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
 
-        header.header-scrolled .logo {
-            font-size: 36px;
-        }
-
-        header.header-scrolled .logo-container {
-            padding: 8px 20px 4px;
-        }
-
-        header.header-scrolled .nav-container {
-            padding: 4px 20px 8px;
-        }
-
-        header.header-scrolled .nav-menu a {
-            font-size: 14px;
-        }
-
-        header.header-scrolled .contact-btn a {
-            padding: 6px 12px;
-            font-size: 13px;
-        }
 
         .logo-container {
             padding: 5px 20px;
@@ -768,12 +744,11 @@
     </footer>
 
     <script>
-        // Adjust body padding for fixed header
+        let currentSectionId = null; // Track the currently active section
+
+        // Adjust body padding for fixed header (fixed to max height to prevent position shifts)
         function adjustBodyPaddingForHeader() {
-            const header = document.querySelector('header');
-            if (!header) return;
-            const headerHeight = header.offsetHeight;
-            document.body.style.paddingTop = headerHeight + 'px';
+            document.body.style.paddingTop = 'calc(60px + 2cm)';
         }
 
         window.addEventListener('load', adjustBodyPaddingForHeader);
@@ -782,20 +757,7 @@
             window._headerResizeTimer = setTimeout(adjustBodyPaddingForHeader, 80);
         });
 
-        // Header shrink on scroll
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('header');
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-            if (scrollTop > 50) {
-                header.classList.add('header-scrolled');
-            } else {
-                header.classList.remove('header-scrolled');
-            }
-
-            // Recalculate body padding when header size changes due to scroll
-            adjustBodyPaddingForHeader();
-        });
 
         // Track scroll direction for fade-out-on-top logic
         let lastScrollY = window.scrollY || window.pageYOffset;
@@ -824,16 +786,25 @@
                     const target = document.querySelector(href);
 
                     if (target) {
-                        // If the target section is already in view, just scroll to it without resetting
-                        if (target.classList.contains('in-view')) {
-                            const headerHeight = document.querySelector('header').offsetHeight;
-                            const targetPosition = target.offsetTop - headerHeight - 20;
+                        const targetId = href.slice(1); // e.g., 'services'
+
+                        // Ensure header is at max height to prevent shifting
+                        const header = document.querySelector('header');
+                        header.classList.remove('header-scrolled');
+
+                        // If clicking the same section, just scroll without resetting
+                        if (currentSectionId === targetId) {
+                            const headerHeight = header.offsetHeight; // Get current header height
+                            const targetPosition = target.offsetTop - headerHeight;
                             window.scrollTo({
                                 top: targetPosition,
                                 behavior: 'smooth'
                             });
                             return;
                         }
+
+                        // Update current section
+                        currentSectionId = targetId;
 
                         // Hide all h2 headings
                         document.querySelectorAll('section h2').forEach(h2 => {
@@ -846,13 +817,15 @@
                             h2.classList.add('visible');
                         }
 
-                        // Reset fade classes on all sections and cards
+                        // Reset fade classes on all sections and cards, but keep manually set ones
                         document.querySelectorAll('.fade-section').forEach(el => {
-                            el.classList.remove('in-view', 'leaving-up');
+                            if (el.id !== currentSectionId) {
+                                el.classList.remove('in-view', 'leaving-up', 'manually-visible');
+                            }
                         });
 
                         // Make target section visible immediately (will still animate)
-                        target.classList.add('fade-section', 'in-view');
+                        target.classList.add('fade-section', 'in-view', 'manually-visible');
 
                         // For About section, also make the blocks visible immediately
                         if (target.id === 'about') {
@@ -862,8 +835,8 @@
                         }
 
                         // Smooth scroll to section
-                        const headerHeight = document.querySelector('header').offsetHeight;
-                        const targetPosition = target.offsetTop - headerHeight - 20;
+                        const headerHeight = header.offsetHeight; // Get current header height
+                        const targetPosition = target.offsetTop - headerHeight;
 
                         window.scrollTo({
                             top: targetPosition,
