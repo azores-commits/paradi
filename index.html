@@ -24,7 +24,7 @@
             padding: 10px;
             position: fixed;
             top: 0;
-            width: 100%;
+            width: 100vw;
             height: calc(60px + 2cm); /* Taller height at the top */
             z-index: 10000;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -537,8 +537,37 @@
             opacity: 1;
         }
 
-        /* Responsive 
-        @media (max-width: :pn:                 font-size: 40px;
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                height: calc(50px + 1.5cm);
+                padding: 5px;
+            }
+
+            .logo {
+                font-size: 40px;
+            }
+
+            .logo-container {
+                padding: 5px 10px;
+            }
+
+            .nav-container {
+                padding: 5px 10px;
+                gap: 15px;
+            }
+
+            .nav-menu {
+                gap: 15px;
+            }
+
+            .nav-menu a {
+                font-size: 14px;
+            }
+
+            .contact-btn a {
+                padding: 6px 12px;
+                font-size: 13px;
             }
 
             .bubble {
@@ -548,6 +577,48 @@
 
             .team-bubbles {
                 gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                height: calc(40px + 1cm);
+                padding: 5px;
+            }
+
+            .logo {
+                font-size: 30px;
+            }
+
+            .logo-container {
+                padding: 5px 5px;
+            }
+
+            .nav-container {
+                padding: 5px 5px;
+                gap: 10px;
+            }
+
+            .nav-menu {
+                gap: 10px;
+            }
+
+            .nav-menu a {
+                font-size: 12px;
+            }
+
+            .contact-btn a {
+                padding: 5px 10px;
+                font-size: 12px;
+            }
+
+            .bubble {
+                width: 50px;
+                height: 50px;
+            }
+
+            .team-bubbles {
+                gap: 10px;
             }
         }
     </style>
