@@ -1,4 +1,3 @@
-- [x] Update script.js: Change 'shrink' class to 'header-scrolled' in the scroll event listener
-- [x] Update styles.css: Change .shrink to .header-scrolled, reduce padding for thinner header, add flexbox to header for logo and nav alignment, change transition to 0.5s ease-in-out
-- [x] Update index.html: Change .shrink to .header-scrolled in inline styles
-- [x] Mark original TODO tasks as completed
+- [ ] Replace the logo div with img tag in index.html
+- [ ] Update .logo CSS to style the image (height: 60px, width: auto, remove text properties)
+- [ ] Update responsive .logo styles (height: 40px at 768px, 30px at 480px)
