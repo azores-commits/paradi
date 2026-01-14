@@ -1,114 +1,278 @@
-// Removed conflicting smooth scrolling logic to prevent display errors on nav menu clicks
+let currentSectionId = null; // Track the currently active section
 
-// Team bubbles interaction
-const bubbles = document.querySelectorAll('.bubble');
+// Adjust body padding for fixed header (fixed to max height to prevent position shifts)
+function adjustBodyPaddingForHeader() {
+    document.body.style.paddingTop = 'calc(60px + 2cm)';
+}
 
-bubbles.forEach(bubble => {
-    bubble.addEventListener('mouseenter', function() {
-        this.querySelector('.name').style.opacity = '1';
-    });
+window.addEventListener('load', adjustBodyPaddingForHeader);
+window.addEventListener('resize', function() {
+    clearTimeout(window._headerResizeTimer);
+    window._headerResizeTimer = setTimeout(adjustBodyPaddingForHeader, 80);
+});
 
-    bubble.addEventListener('mouseleave', function() {
-        this.querySelector('.name').style.opacity = '0';
+
+
+// Track scroll direction for fade-out-on-top logic
+let lastScrollY = window.scrollY || window.pageYOffset;
+let scrollDirection = 'down';
+
+window.addEventListener('scroll', () => {
+    const currentY = window.scrollY || window.pageYOffset;
+    scrollDirection = currentY > lastScrollY ? 'down' : 'up';
+    lastScrollY = currentY;
+});
+
+// Smooth scrolling and show h2 on navigation click (nav menu only)
+document.querySelectorAll('.nav-menu a[href^="#"], .contact-btn a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+
+        // Handle contact button separately
+        if (href === '#contact') {
+            e.preventDefault();
+            alert('Contact form would open here or redirect to contact page.\n\nEmail: contact@paradi.com\nPhone: +1 (555) 123-4567');
+            return;
+        }
+
+        if (href !== '#') {
+            e.preventDefault();
+            const target = document.querySelector(href);
+
+            if (target) {
+                const targetId = href.slice(1); // e.g., 'services'
+
+                // Ensure header is at max height to prevent shifting
+                const header = document.querySelector('header');
+                header.classList.remove('header-scrolled');
+
+                // If clicking the same section, just scroll without resetting
+                if (currentSectionId === targetId) {
+                    const headerHeight = header.offsetHeight; // Get current header height
+                    const targetPosition = target.offsetTop - headerHeight;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                    return;
+                }
+
+                // Update current section
+                currentSectionId = targetId;
+
+                // Hide all h2 headings
+                document.querySelectorAll('section h2').forEach(h2 => {
+                    h2.classList.remove('visible');
+                });
+
+                // Show the target section's h2
+                const h2 = target.querySelector('h2');
+                if (h2) {
+                    h2.classList.add('visible');
+                }
+
+                // Reset fade classes on all sections and cards, but keep manually set ones
+                document.querySelectorAll('.fade-section').forEach(el => {
+                    if (el.id !== currentSectionId) {
+                        el.classList.remove('in-view', 'leaving-up', 'manually-visible');
+                    }
+                });
+
+                // Make target section visible immediately (will still animate)
+                target.classList.add('fade-section', 'in-view', 'manually-visible');
+
+                // For About section, also make the blocks visible immediately
+                if (target.id === 'about') {
+                    document.querySelectorAll('.about-content .about-block').forEach(block => {
+                        block.classList.add('in-view');
+                    });
+                }
+
+                // Smooth scroll to section
+                const headerHeight = header.offsetHeight; // Get current header height
+                const targetPosition = target.offsetTop - headerHeight;
+
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
     });
 });
 
-// Contact Us handler
-document.querySelector('.contact-btn a').addEventListener('click', function(e) {
-    e.preventDefault();
-    alert('Contact form would open here or redirect to contact page.\n\nEmail: contact@paradi.com\nPhone: +1 (555) 123-4567');
-});
-
-// Add scroll animation for sections - fade in and slide up on scroll
+// Scroll animations
 const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
+    threshold: 0.3,
+    rootMargin: '0px 0px 0px 0px'
 };
 
 const observer = new IntersectionObserver(function(entries) {
     entries.forEach(entry => {
+        const el = entry.target;
+
         if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-            // Stop observing after animation triggers
-            observer.unobserve(entry.target);
+            el.classList.add('in-view');
+            el.classList.remove('leaving-up');
+
+            // Show the current section's h2 when it fades in
+            if (el.tagName === 'SECTION') {
+                const h2 = el.querySelector('h2');
+                if (h2) {
+                    h2.classList.add('visible');
+                }
+            }
+        } else {
+            // When scrolling down and element leaves at the top, fade it out upwards
+            const rect = entry.boundingClientRect;
+            if (scrollDirection === 'down' && rect.top < 0) {
+                el.classList.remove('in-view');
+                el.classList.add('leaving-up');
+            }
         }
     });
 }, observerOptions);
 
 // Animate sections
 document.querySelectorAll('section').forEach(section => {
-    section.style.opacity = '0';
-    section.style.transform = 'translateY(20px)';
-    section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    section.classList.add('fade-section');
     observer.observe(section);
 });
 
-// Animate service cards
+// Animate service cards with slight stagger
 document.querySelectorAll('.service-card').forEach((el) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = `opacity 0.6s ease 0.1s, transform 0.6s ease 0.1s`;
+    el.classList.add('fade-section');
+    el.style.transitionDelay = '0.1s';
     observer.observe(el);
 });
 
+// Animate project cards with the same fade effect for consistency
+document.querySelectorAll('.project-card').forEach((el) => {
+    el.classList.add('fade-section');
+    el.style.transitionDelay = '0.1s';
+    observer.observe(el);
+});
 
+// Animate each about block individually instead of the whole container
+document.querySelectorAll('.about-content .about-block').forEach((el) => {
+    el.classList.add('fade-section');
+    observer.observe(el);
+});
 
-// Adjust body padding-top to avoid content being hidden under fixed header
-function adjustBodyPaddingForHeader() {
-    const header = document.querySelector('header');
-    const headerHeight = header.offsetHeight;
-    document.body.style.paddingTop = headerHeight + 'px';
-}
+// 3D Projects carousel with flip-on-click
+const projectCards = Array.from(document.querySelectorAll('.projects-carousel .project-card-3d'));
+let currentProjectIndex = 0;
 
-// Show home section h2 on load to match "Home" nav click behavior
-function showHomeOnLoad() {
-    const homeSection = document.querySelector('#home');
-    if (homeSection) {
-        // Hide all section h2
-        document.querySelectorAll('section h2').forEach(h2 => h2.style.display = 'none');
-        // Show the home section's h2
-        const h2 = homeSection.querySelector('h2');
-        if (h2) {
-            h2.style.display = 'block';
-            h2.classList.add('visible');
+function updateProjectCarousel() {
+    if (!projectCards.length) return;
+    const lastIndex = projectCards.length - 1;
+
+    projectCards.forEach((card, index) => {
+        card.classList.remove('active', 'left', 'right', 'inactive');
+
+        if (index === currentProjectIndex) {
+            card.classList.add('active');
+        } else if (index === (currentProjectIndex - 1 + projectCards.length) % projectCards.length) {
+            card.classList.add('left');
+        } else if (index === (currentProjectIndex + 1) % projectCards.length) {
+            card.classList.add('right');
+        } else {
+            card.classList.add('inactive');
         }
-        // Reset fade classes on all sections and cards
-        document.querySelectorAll('.fade-section').forEach(el => {
-            el.classList.remove('in-view', 'leaving-up');
-        });
-        // Make home section visible immediately
-        homeSection.classList.add('fade-section', 'in-view');
-        // Also ensure the section is visible
-        homeSection.style.opacity = '1';
-        homeSection.style.transform = 'translateY(0)';
-    }
+    });
 }
 
-// Run on load and update on resize
-window.addEventListener('load', function() {
-    // Ensure header is not shrunk on page load
-    const header = document.querySelector('header');
-    header.classList.remove("header-scrolled");
-    adjustBodyPaddingForHeader();
-    showHomeOnLoad();
-    // Scroll to top to show the highest part of the page
-    window.scrollTo(0, 0);
-});
-window.addEventListener('resize', function() {
-    // small debounce
-    clearTimeout(window._headerResizeTimer);
-    window._headerResizeTimer = setTimeout(adjustBodyPaddingForHeader, 80);
+projectCards.forEach((card, index) => {
+    card.addEventListener('click', () => {
+        // If this card is not active, bring it to the front
+        if (index !== currentProjectIndex) {
+            currentProjectIndex = index;
+            projectCards.forEach(c => c.classList.remove('flipped'));
+            updateProjectCarousel();
+        } else {
+            // If already active, flip to show/hide details
+            card.classList.toggle('flipped');
+        }
+    });
 });
 
-window.onscroll = function() {
-  const header = document.querySelector('header');
-  const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+updateProjectCarousel();
 
-  if (scrollTop > 50) {
-    header.classList.add("header-scrolled");
-  } else {
-    header.classList.remove("header-scrolled");
-  }
-  adjustBodyPaddingForHeader();
-};
+// Swipe and drag functionality for carousel
+let startX = 0;
+let isDragging = false;
+
+const carousel = document.querySelector('.projects-carousel');
+
+// Touch events for mobile
+carousel.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    isDragging = true;
+}, { passive: false });
+
+carousel.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+}, { passive: false });
+
+carousel.addEventListener('touchend', (e) => {
+    if (!isDragging) return;
+    isDragging = false;
+    const endX = e.changedTouches[0].clientX;
+    const diff = startX - endX;
+    if (Math.abs(diff) > 50) { // swipe threshold
+        if (diff > 0) {
+            // swipe left, next project
+            currentProjectIndex = (currentProjectIndex + 1) % projectCards.length;
+        } else {
+            // swipe right, prev project
+            currentProjectIndex = (currentProjectIndex - 1 + projectCards.length) % projectCards.length;
+        }
+        updateProjectCarousel();
+    }
+});
+
+// Mouse events for desktop drag
+carousel.addEventListener('mousedown', (e) => {
+    startX = e.clientX;
+    isDragging = true;
+    e.preventDefault(); // Prevent text selection
+});
+
+carousel.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+});
+
+carousel.addEventListener('mouseup', (e) => {
+    if (!isDragging) return;
+    isDragging = false;
+    const endX = e.clientX;
+    const diff = startX - endX;
+    if (Math.abs(diff) > 50) { // drag threshold
+        if (diff > 0) {
+            // drag left, next project
+            currentProjectIndex = (currentProjectIndex + 1) % projectCards.length;
+        } else {
+            // drag right, prev project
+            currentProjectIndex = (currentProjectIndex - 1 + projectCards.length) % projectCards.length;
+        }
+        updateProjectCarousel();
+    }
+});
+
+// Mobile menu toggle functions
+function toggleMenu() {
+    const menuContent = document.querySelector('.mobile-menu-content');
+    const toggleButton = document.querySelector('.menu-toggle');
+    const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true';
+    toggleButton.setAttribute('aria-expanded', !isExpanded);
+    menuContent.classList.toggle('active');
+}
+
+function closeMenu() {
+    const menuContent = document.querySelector('.mobile-menu-content');
+    const toggleButton = document.querySelector('.menu-toggle');
+    menuContent.classList.remove('active');
+    toggleButton.setAttribute('aria-expanded', 'false');
+}
