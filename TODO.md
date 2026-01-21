@@ -1,6 +1,4 @@
-# TODO List for Mobile Header Restructure (Mobile Only, Desktop Revert)
-
-- [x] Edit index.html: Move nav-menu back into nav-container for desktop, keep mobile-menu-content for mobile.
-- [x] Edit styles.css: Show nav-menu in nav-container on desktop, hide on mobile; show mobile-menu-content and menu-toggle only on mobile.
-- [x] Edit script.js: Ensure toggle functions work only on mobile.
-- [x] Test the changes: Desktop should show original nav-menu, mobile should show new toggle and dropdown.
+- [x] Edit styles.css in @media (max-width: 768px) to add position: fixed; top: calc(50px + 1.5cm); left: 0; width: 100%; to .mobile-menu-content.active
+- [x] Edit styles.css in @media (max-width: 480px) to add position: fixed; top: calc(40px + 1cm); left: 0; width: 100%; to .mobile-menu-content.active
+- [x] Center the list inside mobile menu by adding text-align: center to .main-navigation in mobile media queries
+- [x] Center the mobile menu on screen by changing width to 80% with max-width 400px and centering with left: 50%; transform: translateX(-50%) in mobile media queries
