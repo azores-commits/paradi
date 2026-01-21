@@ -677,6 +677,36 @@ footer {
         margin-right: 0;
     }
 
+    .paradi-represents ul,
+    .core-values ul {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .brand-personality ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .paradi-represents li,
+    .core-values li {
+        margin-bottom: 5px;
+        margin-right: 10px;
+    }
+
+    .brand-personality li {
+        margin-bottom: 5px;
+    }
+
+    .paradi-represents li::before,
+    .core-values li::before,
+    .brand-personality li::before {
+        content: "•";
+        margin-right: 5px;
+    }
+
     /* Projects carousel mobile adjustments */
     .projects-carousel {
         max-width: 100%;
